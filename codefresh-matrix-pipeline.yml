@@ -31,13 +31,13 @@ steps:
       - KUBE_CONTEXT=${{KUBE_CONTEXT}}
       - NAMESPACE=${{KUBE_NAMESPACE}}
       - DEBUG_CHART=true
-      - custom_result_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/codefresh/example-voting-app-result
+      - custom_result_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/example-voting-app/example-voting-app-result
       - custom_result_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_result_image_pullSecret=${{KUBE_PULL_SECRET}}
-      - custom_vote_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/codefresh/example-voting-app-vote
+      - custom_vote_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/example-voting-app/example-voting-app-vote
       - custom_vote_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_vote_image_pullSecret=${{KUBE_PULL_SECRET}}
-      - custom_worker_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/codefresh/example-voting-app-worker
+      - custom_worker_image_repository=r.cfcr.io/${{CODEFRESH_ACCOUNT}}/example-voting-app/example-voting-app-worker
       - custom_worker_image_tag=${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
       - custom_worker_image_pullSecret=${{KUBE_PULL_SECRET}}
   GetKubernetesServicesEndpoints:
@@ -48,7 +48,7 @@ steps:
   BuildingTestDockerImage:
     title: Building Test Docker Image
     type: build
-    image_name: codefresh/example-voting-app-tests
+    image_name: example-voting-app/example-voting-app-tests
     working_directory: ./
     dockerfile: Dockerfile
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
@@ -100,7 +100,7 @@ steps:
           RESULT_ENDPOINT_IP: ${{RESULT_ENDPOINT_IP}}
         command: bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "$${browserarray[@]}"; do BROWSER=$$browser python -m pytest -vvv --html=./selenium-report-$${browser}.html --self-contained-html ./tests/selenium/test_app.py; done'
         volumes:
-          - '${{CF_VOLUME_NAME}}:/codefresh/volume'
+          - '${{CF_VOLUME_NAME}}:/example-voting-app/volume'
     add_flow_volume_to_composition: true
     on_success:
       metadata:
